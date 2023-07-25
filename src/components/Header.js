@@ -3,11 +3,27 @@ import styled from "styled-components";
 import Octicon from "react-octicon";
 import Search from "./Search";
 import { getPublicGists } from "../services/gistService";
+import { useSelector, useDispatch } from "react-redux";
+import { set } from "../redux/userSlice";
 
 function Header() {
+  const { value, searchValue } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  const getData = async () => {
+    try {
+      const res = await getPublicGists();
+      dispatch(set(res.data));
+    } catch (error) {}
+  };
+
   useEffect(() => {
-    getPublicGists();
+    getData();
   }, []);
+
+  useEffect(() => {
+    console.log({ value, searchValue });
+  }, [value, searchValue]);
 
   return (
     <Wrapper>

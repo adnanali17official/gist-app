@@ -3,12 +3,14 @@ import Header from "./components/Header";
 import GlobalStyles from "./GlobalStyle";
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import GistList from "./components/GistList";
 
 const App = () => {
   return (
     <Provider store={store}>
       <Wrapper className="App" data-testid="app">
         <Header />
+        <GistList />
         <GlobalStyles />
       </Wrapper>
     </Provider>

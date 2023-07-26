@@ -1,34 +1,44 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Octicon from "react-octicon";
 import Search from "./Search";
-import { getPublicGists } from "../services/gistService";
-import { useSelector, useDispatch } from "react-redux";
-import { set } from "../redux/userSlice";
+import { getGistForUser } from "../services/gistService";
+import { useDispatch } from "react-redux";
+import { notFound, setSearch } from "../redux/userSlice";
 
 function Header() {
-  const { value, searchValue } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const [searchString, setSearchString] = useState("");
 
-  const getData = async () => {
+  const getSearchData = async (value) => {
     try {
-      const res = await getPublicGists();
-      dispatch(set(res.data));
+      if (value.trim().length > 0) {
+        const res = await getGistForUser(value);
+        dispatch(setSearch(res.data));
+        dispatch(notFound(res.data.length === 0));
+      } else {
+        dispatch(setSearch([]));
+        dispatch(notFound(false));
+      }
     } catch (error) {}
   };
 
   useEffect(() => {
-    getData();
-  }, []);
+    const getData = setTimeout(() => {
+      getSearchData(searchString);
+    }, 500);
 
-  useEffect(() => {
-    console.log({ value, searchValue });
-  }, [value, searchValue]);
+    return () => clearTimeout(getData);
+  }, [searchString]);
 
   return (
     <Wrapper>
       <Octicon name="mark-github" mega />
-      <Search />
+      <Search
+        onChange={(value) => {
+          setSearchString(value);
+        }}
+      />
     </Wrapper>
   );
 }

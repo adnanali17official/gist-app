@@ -25,12 +25,13 @@ const Wrapper = styled.div`
   line-height: 1.5;
   border-radius: 6px;
   margin: 0 16px;
+  width: 100%;
+  max-width: 400px;
 `;
 
 const InputBox = styled.div`
   border-radius: 4px;
   display: flex;
-  width: 400px;
 `;
 
 const Input = styled.input`

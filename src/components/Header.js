@@ -20,7 +20,10 @@ function Header() {
         dispatch(setSearch([]));
         dispatch(notFound(false));
       }
-    } catch (error) {}
+    } catch (error) {
+      dispatch(setSearch([]));
+      dispatch(notFound(false));
+    }
   };
 
   useEffect(() => {
